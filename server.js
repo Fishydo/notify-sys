@@ -6,17 +6,17 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 const vapidKeys = webPush.generateVAPIDKeys();
+
 webPush.setVapidDetails(
   'mailto:admin@example.com',
   vapidKeys.publicKey,
-  vapidKeys.privateKey,
+  vapidKeys.privateKey
 );
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const subscriptions = new Map();
-
 
 app.get('/vapidPublicKey', (_req, res) => {
   res.json({ publicKey: vapidKeys.publicKey });
@@ -30,21 +30,31 @@ app.post('/subscribe', (req, res) => {
   }
 
   subscriptions.set(subscription.endpoint, subscription);
-  return res.status(201).json({ success: true, totalSubscribers: subscriptions.size });
+
+  return res.status(201).json({
+    success: true,
+    totalSubscribers: subscriptions.size
+  });
 });
 
 app.post('/notify', async (req, res) => {
+  const { message } = req.body; // ✅ FIX: define message
 
   if (!message || typeof message !== 'string' || !message.trim()) {
     return res.status(400).json({ error: 'Message is required.' });
   }
 
-    sentAt: new Date().toISOString(),
+  const payload = JSON.stringify({  // ✅ FIX: properly create payload
+    message,
+    sentAt: new Date().toISOString()
   });
 
   const subscriptionList = [...subscriptions.values()];
+
   const results = await Promise.allSettled(
-    subscriptionList.map((subscription) => webPush.sendNotification(subscription, payload)),
+    subscriptionList.map((subscription) =>
+      webPush.sendNotification(subscription, payload)
+    )
   );
 
   let delivered = 0;
@@ -53,17 +63,22 @@ app.post('/notify', async (req, res) => {
   results.forEach((result, index) => {
     if (result.status === 'fulfilled') {
       delivered += 1;
-      return;
-    }
+    } else {
+      failed += 1;
 
-    failed += 1;
-    const statusCode = result.reason && result.reason.statusCode;
-    if (statusCode === 404 || statusCode === 410) {
-      subscriptions.delete(subscriptionList[index].endpoint);
+      const statusCode = result.reason && result.reason.statusCode;
+
+      if (statusCode === 404 || statusCode === 410) {
+        subscriptions.delete(subscriptionList[index].endpoint);
+      }
     }
   });
 
-  return res.json({ delivered, failed, totalSubscribers: subscriptions.size });
+  return res.json({
+    delivered,
+    failed,
+    totalSubscribers: subscriptions.size
+  });
 });
 
 app.listen(port, () => {
