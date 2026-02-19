@@ -17,6 +17,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const subscriptions = new Map();
 
+
 app.get('/vapidPublicKey', (_req, res) => {
   res.json({ publicKey: vapidKeys.publicKey });
 });
@@ -72,3 +73,4 @@ app.post('/notify', async (req, res) => {
 app.listen(port, () => {
   console.log(`Notification app running at http://localhost:${port}`);
 });
+
