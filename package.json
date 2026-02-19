@@ -1,0 +1,13 @@
+{
+  "name": "notify-sys",
+  "version": "1.0.0",
+  "description": "Service worker based broadcast notifications",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "web-push": "^3.6.7"
+  }
+}
