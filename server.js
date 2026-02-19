@@ -5,9 +5,6 @@ const webPush = require('web-push');
 const app = express();
 const port = process.env.PORT || 3000;
 
-const HEALTHCHECK_URL = 'https://notify-sys.onrender.com';
-const HEALTHCHECK_INTERVAL_MS = 60 * 1000;
-
 const vapidKeys = webPush.generateVAPIDKeys();
 webPush.setVapidDetails(
   'mailto:admin@example.com',
@@ -20,27 +17,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const subscriptions = new Map();
 
-function isValidHttpUrl(value) {
-  try {
-    const url = new URL(value);
-    return url.protocol === 'http:' || url.protocol === 'https:';
-  } catch (_error) {
-    return false;
-  }
-}
-
-function isValidImageDataUrl(value) {
-  return typeof value === 'string' && value.startsWith('data:image/');
-}
-
-async function pingHealthcheck() {
-  try {
-    const response = await fetch(HEALTHCHECK_URL, { method: 'GET' });
-    console.log(`[healthcheck] pinged ${HEALTHCHECK_URL} (${response.status})`);
-  } catch (error) {
-    console.error(`[healthcheck] ping failed: ${error.message}`);
-  }
-}
 
 app.get('/vapidPublicKey', (_req, res) => {
   res.json({ publicKey: vapidKeys.publicKey });
@@ -58,28 +34,11 @@ app.post('/subscribe', (req, res) => {
 });
 
 app.post('/notify', async (req, res) => {
-  const { message, imageUrl } = req.body;
 
   if (!message || typeof message !== 'string' || !message.trim()) {
     return res.status(400).json({ error: 'Message is required.' });
   }
 
-  const hasImage = typeof imageUrl === 'string' && imageUrl.length > 0;
-  const validHttpImage = hasImage && isValidHttpUrl(imageUrl);
-  const validDataImage = hasImage && isValidImageDataUrl(imageUrl);
-
-  if (hasImage && !validHttpImage && !validDataImage) {
-    return res.status(400).json({ error: 'Image must be a valid http/https URL or uploaded image.' });
-  }
-
-  if (validDataImage && imageUrl.length > 2_000_000) {
-    return res.status(400).json({ error: 'Uploaded image is too large.' });
-  }
-
-  const payload = JSON.stringify({
-    title: 'New shared message',
-    body: message.trim(),
-    imageUrl: imageUrl || '',
     sentAt: new Date().toISOString(),
   });
 
@@ -110,6 +69,3 @@ app.post('/notify', async (req, res) => {
 app.listen(port, () => {
   console.log(`Notification app running at http://localhost:${port}`);
 });
-
-pingHealthcheck();
-setInterval(pingHealthcheck, HEALTHCHECK_INTERVAL_MS);
