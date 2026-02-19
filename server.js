@@ -18,19 +18,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 const subscriptions = new Map();
 
 
-const HEALTHCHECK_URL = 'https://notify-sys.onrender.com';
-const HEALTHCHECK_INTERVAL_MS = 60 * 1000;
-
-async function pingHealthcheck() {
-  try {
-    const response = await fetch(HEALTHCHECK_URL, { method: 'GET' });
-    console.log(`[healthcheck] pinged ${HEALTHCHECK_URL} (${response.status})`);
-  } catch (error) {
-    console.error(`[healthcheck] ping failed: ${error.message}`);
-  }
-}
-
-
 app.get('/vapidPublicKey', (_req, res) => {
   res.json({ publicKey: vapidKeys.publicKey });
 });
@@ -87,6 +74,3 @@ app.listen(port, () => {
   console.log(`Notification app running at http://localhost:${port}`);
 });
 
-
-pingHealthcheck();
-setInterval(pingHealthcheck, HEALTHCHECK_INTERVAL_MS);
