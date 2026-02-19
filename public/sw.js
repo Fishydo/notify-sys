@@ -7,11 +7,7 @@ self.addEventListener('push', (event) => {
 
   event.waitUntil(
     (async () => {
-      await self.registration.showNotification(payload.title, {
-        body: payload.body,
-        tag: 'broadcast-message',
-      });
-
+      
       const clients = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
       clients.forEach((client) => {
         client.postMessage({ type: 'PUSH_MESSAGE', payload });

@@ -34,15 +34,11 @@ app.post('/subscribe', (req, res) => {
 });
 
 app.post('/notify', async (req, res) => {
-  const { message } = req.body;
 
   if (!message || typeof message !== 'string' || !message.trim()) {
     return res.status(400).json({ error: 'Message is required.' });
   }
 
-  const payload = JSON.stringify({
-    title: 'New shared message',
-    body: message.trim(),
     sentAt: new Date().toISOString(),
   });
 
@@ -73,4 +69,3 @@ app.post('/notify', async (req, res) => {
 app.listen(port, () => {
   console.log(`Notification app running at http://localhost:${port}`);
 });
-

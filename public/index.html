@@ -4,33 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Notify Everyone</title>
-    <style>
-      body { font-family: Arial, sans-serif; margin: 2rem; max-width: 760px; }
-      .row { display: flex; gap: 0.5rem; }
-      input { flex: 1; padding: 0.5rem; }
-      button { padding: 0.5rem 1rem; }
-      #status { margin: 1rem 0; }
-      ul { padding-left: 1rem; }
-    </style>
-  </head>
-  <body>
-    <h1>Broadcast Notification Demo</h1>
-    <p>Allow notifications, then send a message. Everyone subscribed receives a push notification, even with no tab open.</p>
-
-    <div class="row">
-      <button id="enable">Enable notifications</button>
-      <span id="status">Not subscribed</span>
-    </div>
-
-    <h2>Send message to everyone</h2>
-    <div class="row">
-      <input id="message" type="text" placeholder="Type your message" />
-      <button id="send">Send</button>
-    </div>
-
-    <h3>Messages received in this tab</h3>
-    <ul id="inbox"></ul>
-
     <script src="/app.js"></script>
   </body>
 </html>
