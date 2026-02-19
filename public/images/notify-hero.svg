@@ -1,0 +1,8 @@
+<svg width="640" height="220" viewBox="0 0 640 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="220" rx="20" fill="#0f172a"/>
+  <circle cx="95" cy="110" r="56" fill="#2563eb"/>
+  <path d="M95 76C79 76 66 89 66 105V129L55 141V148H135V141L124 129V105C124 89 111 76 95 76Z" fill="white"/>
+  <circle cx="95" cy="156" r="8" fill="white"/>
+  <text x="180" y="95" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="34" font-weight="700">Notify Everyone</text>
+  <text x="180" y="132" fill="#93C5FD" font-family="Arial, sans-serif" font-size="20">Real-time + background push notifications</text>
+</svg>

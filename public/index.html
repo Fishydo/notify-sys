@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notify Everyone</title>
+    <link rel="icon" type="image/svg+xml" href="/images/notify-icon.svg" />
+    <style>
+      :root { --bg:#eef4ff; --card:#fff; --text:#0f172a; --muted:#475569; --line:#dbe7ff; --p:#2563eb; --p2:#1d4ed8; }
+      *{box-sizing:border-box} body{margin:0;font-family:Inter,Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 12% 10%,#dbeafe 0%,var(--bg) 45%)}
+      .wrap{max-width:920px;margin:2rem auto;padding:0 1rem 2rem}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 14px 35px rgba(37,99,235,.08);padding:1.2rem}
+      h1{margin:0 0 .4rem} p{margin:0 0 1rem;color:var(--muted)} .row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center} .grid{display:grid;gap:.8rem}
+      label{display:grid;gap:.35rem;font-weight:600} input,select{width:100%;border:1px solid #cdd8f5;border-radius:12px;padding:.72rem .8rem;font-size:.95rem;background:#fff}
+      input:focus,select:focus{outline:none;border-color:var(--p);box-shadow:0 0 0 3px rgba(37,99,235,.15)} button{border:none;border-radius:12px;padding:.72rem 1rem;background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;font-weight:700;cursor:pointer}
+      .status{font-weight:700;color:#0b7a35}.hint{color:var(--muted);font-size:.9rem}.preview{display:none;border:1px dashed #93c5fd;border-radius:12px;padding:.7rem;background:#eff6ff}
+      .preview img{width:100%;max-height:220px;object-fit:cover;border-radius:10px}.inbox{list-style:none;margin:0;padding:0;display:grid;gap:.7rem}.inbox-item{border:1px solid var(--line);border-radius:12px;padding:.75rem;background:#f8fbff}
+      .inbox-item img{margin-top:.5rem;width:100%;max-height:160px;object-fit:cover;border-radius:10px}.time{color:#64748b;font-size:.82rem;margin-top:.2rem}
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <section class="card grid">
+        <div>
+          <h1>Broadcast Notification Center</h1>
+          <p>Send message notifications to all subscribed users. Use a custom URL, upload an image, or let the service generate a random temporary URL path.</p>
+        </div>
+
+        <div class="row">
+          <button id="enable">Enable notifications</button>
+          <span class="status" id="status">Not subscribed</span>
+        </div>
+
+        <label>Message<input id="message" type="text" placeholder="Type your announcement" /></label>
+
+        <label>
+          Image Source
+          <select id="imageSource">
+            <option value="none">No image</option>
+            <option value="custom">Custom URL</option>
+            <option value="upload">Upload image</option>
+            <option value="random">Random temporary URL (service generated)</option>
+          </select>
+        </label>
+
+        <label id="customUrlWrap" style="display:none;">Custom image URL<input id="customImageUrl" type="url" placeholder="https://example.com/photo.jpg" /></label>
+        <label id="uploadWrap" style="display:none;">Upload image file<input id="uploadImage" type="file" accept="image/*" /></label>
+
+        <div class="preview" id="imagePreviewWrap"><div class="hint">Image preview</div><img id="imagePreview" alt="Notification image preview" /></div>
+
+        <div class="row"><button id="send">Send to everyone</button><span class="hint">Press Enter in the message box to send.</span></div>
+
+        <div><h3>Messages received in this tab</h3><ul class="inbox" id="inbox"></ul></div>
+      </section>
+    </main>
+    <script src="/app.js"></script>
+  </body>
+</html>
