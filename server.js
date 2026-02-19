@@ -5,7 +5,7 @@ const webPush = require('web-push');
 const app = express();
 const port = process.env.PORT || 3000;
 
-const vapidKeys = webPush.generateVAPIDKeys();
+const vapidKeys = {   publicKey: process.env.VAPID_PUBLIC_KEY,   privateKey: process.env.VAPID_PRIVATE_KEY };  if (!vapidKeys.publicKey || !vapidKeys.privateKey) {   throw new Error("VAPID keys missing. Set environment variables."); }
 
 webPush.setVapidDetails(
   'mailto:admin@example.com',
